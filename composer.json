@@ -1,0 +1,27 @@
+{
+  "name": "leo-ar/vnode",
+  "type": "library",
+  "description": "Create composable, structured html with php",
+  "license": "LGPL-3.0-or-later",
+  "authors": [
+    {
+      "name": "leo-ar",
+      "email": "lrojas@gmail.com"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/leo-ar/vnode/issues"
+  },
+  "autoload": {
+    "psr-0": {"vnode": "src/"}
+  },
+  "require" : {
+    "php" : "^7.2"
+  },
+  "require-dev": {
+    "kahlan/kahlan": "^4.6"
+  },
+  "scripts": {
+    "test": "kahlan --reporter='verbose'"
+  }
+}
