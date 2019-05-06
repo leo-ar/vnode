@@ -36,15 +36,10 @@ function is_boolean_attribute($name): bool {
     return !is_string($name) || '' === $name;
 }
 
-function is_valid_attribute_name($name): bool {
-    return ctype_alpha(mb_substr($name, 0, 1));
-}
-
 function normalize_attributes(array $array, array $res=[]): array {
     foreach ($array as $key => $val) {
         if (is_null($val)) continue;
         $attr_name = is_boolean_attribute($key) ? (string)$val : $key;
-        if (!is_valid_attribute_name($attr_name)) throw new \DomainException('Invalid attribute name: ' . $attr_name);
         if (is_array($val)) $attr_value = multival($val, ' ');
         elseif (is_multival($val)) $attr_value = $val;
         else $attr_value = $val;

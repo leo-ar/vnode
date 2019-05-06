@@ -78,14 +78,6 @@ describe("el('a', ['href'=>'/link', 'id'=>'Anchor', 'class'=>'btn primary'])", f
     });
 });
 
-describe("el('a', ['99-red'=>'ballons'])", function () {
-    describe('the attribute key', function () {
-        it("throws a 'DomainException' if it doesn't start with an alphabetic character", function() {
-            expect(function () { el('a', ['99-red'=>'ballons']); })->toThrow(new \DomainException());
-        });
-    });
-});
-
 describe("el('a', ['ninety 9 red &(|'=>'ballons'])", function () {
     describe('the attribute key', function () {
         it("is not validated", function() {
