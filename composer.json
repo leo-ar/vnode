@@ -19,7 +19,7 @@
     "php" : "^8.0"
   },
   "require-dev": {
-    "kahlan/kahlan": "^4.6"
+    "kahlan/kahlan": "^5.2"
   },
   "scripts": {
     "test": "kahlan --reporter='verbose'"
