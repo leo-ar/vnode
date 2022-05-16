@@ -1,8 +1,9 @@
 # Contributing
 
-When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change.
+When contributing to this repository, please first discuss the change you wish to make by opening an [issue](https://github.com/leo-ar/vnode/issues).
 
 ## Development
+
 - [Download `composer.phar` locally](https://getcomposer.org/download/)
 
 - From the root of the repo:
@@ -12,4 +13,3 @@ When contributing to this repository, please first discuss the change you wish t
     `./composer.phar update`
   - Run tests:
     `./composer.phar test`
-
