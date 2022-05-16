@@ -212,12 +212,6 @@ example
 
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/leo-ar/vnode/tags).
 
-
-## License
-
-This project is licensed under the [GNU Lesser General Public License v3.0 or later](https://www.gnu.org/licenses/lgpl-3.0-standalone.html).
-
-
 ## Contributing
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details.

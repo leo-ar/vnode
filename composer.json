@@ -2,7 +2,7 @@
   "name": "leo-ar/vnode",
   "type": "library",
   "description": "Create composable, structured html with php",
-  "license": "LGPL-3.0-or-later",
+  "license": "LGPL-3.0-only",
   "authors": [
     {
       "name": "leo-ar",
