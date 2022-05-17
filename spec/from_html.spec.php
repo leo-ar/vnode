@@ -1,11 +1,13 @@
 <?php
+
 declare(strict_types=1);
 
 require_once './src/vnode.php';
 
 use function vnode\from_html;
 
-describe("from_html", function () {});
+describe("from_html", function () {
+});
 
 describe("from_html('<my-tag/>')", function () {
     $this->actual = from_html('<my-tag/>');
@@ -43,7 +45,9 @@ describe("from_html('<my-tag/><your-tag/>')", function () {
     $this->actual = from_html('<my-tag/><your-tag/>');
     it("returns an array of two vnodes", function () {
         expect($this->actual)->toHaveLength(2);
-        foreach ($this->actual as $vnode) expect($vnode)->toBeAnInstanceOf('vnode\Vnode');
+        foreach ($this->actual as $vnode) {
+            expect($vnode)->toBeAnInstanceOf('vnode\Vnode');
+        }
     });
 });
 

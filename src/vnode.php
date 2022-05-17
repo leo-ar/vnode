@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace vnode;
@@ -10,39 +11,52 @@ namespace vnode;
 // ///////////////////////////////////////////////////////////////////
 // Attributes
 
-class AttributeMultiValue {
+class AttributeMultiValue
+{
     public $values;
     public $sep;
 
-    public function __construct(array $values, string $sep) {
+    public function __construct(array $values, string $sep)
+    {
         $this->values = $values;
         $this->sep = $sep;
     }
 }
 
-function multival(array $values, string $sep=' '): AttributeMultiValue {
+function multival(array $values, string $sep=' '): AttributeMultiValue
+{
     return new AttributeMultiValue($values, $sep);
 }
 
-function comma(...$values): AttributeMultiValue {
+function comma(...$values): AttributeMultiValue
+{
     return new AttributeMultiValue(normalize_array($values), ',');
 }
 
-function is_multival($thing): bool {
+function is_multival($thing): bool
+{
     return $thing instanceof AttributeMultiValue;
 }
 
-function is_boolean_attribute($name): bool {
+function is_boolean_attribute($name): bool
+{
     return !is_string($name) || '' === $name;
 }
 
-function normalize_attributes(array $array, array $res=[]): array {
+function normalize_attributes(array $array, array $res=[]): array
+{
     foreach ($array as $key => $val) {
-        if (is_null($val)) continue;
+        if (is_null($val)) {
+            continue;
+        }
         $attr_name = is_boolean_attribute($key) ? (string)$val : $key;
-        if (is_array($val)) $attr_value = multival($val, ' ');
-        elseif (is_multival($val)) $attr_value = $val;
-        else $attr_value = $val;
+        if (is_array($val)) {
+            $attr_value = multival($val, ' ');
+        } elseif (is_multival($val)) {
+            $attr_value = $val;
+        } else {
+            $attr_value = $val;
+        }
         $res[$attr_name] = $attr_value;
     }
     return $res;
@@ -51,34 +65,44 @@ function normalize_attributes(array $array, array $res=[]): array {
 // ///////////////////////////////////////////////////////////////////
 // Children: Wrapped
 
-interface iWrapped {
+interface iWrapped
+{
     public function unwrap(...$args);
 }
 
-class RawText implements iWrapped {
+class RawText implements iWrapped
+{
     private $value;
 
-    public function __construct($value) {
+    public function __construct($value)
+    {
         $this->value = (string)$value;
     }
 
-    public function unwrap(...$args) {
-       return $this->value;
+    public function unwrap(...$args)
+    {
+        return $this->value;
     }
 }
 
-function raw($content): RawText {
+function raw($content): RawText
+{
     return new RawText($content);
 }
 
 // ///////////////////////////////////////////////////////////////////
 // Children: normalize
 
-function normalize_array(array $array, array $res=[]): array {
+function normalize_array(array $array, array $res=[]): array
+{
     foreach ($array as $val) {
-        if (is_array($val)) $res = normalize_array($val, $res);
-        elseif (is_null($val)) continue;
-        else $res[] = $val;
+        if (is_array($val)) {
+            $res = normalize_array($val, $res);
+        } elseif (is_null($val)) {
+            continue;
+        } else {
+            $res[] = $val;
+        }
     }
     return $res;
 }
@@ -88,23 +112,27 @@ function normalize_array(array $array, array $res=[]): array {
 
 const NONE = [];
 
-class Vnode {
+class Vnode
+{
     public $tag;
     public $attributes;
     public $children;
 
-    public function __construct(string $tag, array $attributes, array $children) {
+    public function __construct(string $tag, array $attributes, array $children)
+    {
         $this->tag = $tag;
         $this->attributes = $attributes;
         $this->children = $children;
     }
 }
 
-function is_attributes($thing): bool {
+function is_attributes($thing): bool
+{
     return is_multival($thing) || is_array($thing);
 }
 
-function el($tag, ...$rest): Vnode {
+function el($tag, ...$rest): Vnode
+{
     $len = count($rest);
     if (0 === $len) {
         $attributes = NONE;
@@ -124,8 +152,11 @@ function el($tag, ...$rest): Vnode {
     $attributes = normalize_attributes($attributes);
     $children = normalize_array($children);
 
-    if (is_callable($tag)) return $tag($attributes, $children);
-    else return new Vnode($tag, $attributes, $children);
+    if (is_callable($tag)) {
+        return $tag($attributes, $children);
+    } else {
+        return new Vnode($tag, $attributes, $children);
+    }
 }
 
 
@@ -153,7 +184,8 @@ const SELF_CLOSING = [
     'menuitem' => true,
 ];
 
-function is_self_closing(string $tag): bool {
+function is_self_closing(string $tag): bool
+{
     return array_key_exists($tag, SELF_CLOSING);
 }
 
@@ -185,15 +217,18 @@ const BOOL_ATTR = [
     'typemustmatch' => true
 ];
 
-function is_bool_attr(string $name): bool {
+function is_bool_attr(string $name): bool
+{
     return array_key_exists($name, BOOL_ATTR);
 }
 
-function multival_to_str(AttributeMultiValue $val): string {
+function multival_to_str(AttributeMultiValue $val): string
+{
     return join($val->sep, $val->values);
 }
 
-function attributes_to_html(array $attributes): string {
+function attributes_to_html(array $attributes): string
+{
     $result = '';
     foreach ($attributes as $key => $val) {
         $value = is_multival($val) ? multival_to_str($val) : $val;
@@ -202,33 +237,47 @@ function attributes_to_html(array $attributes): string {
     return $result;
 }
 
-function vnode_to_html(Vnode $vnode): string {
+function vnode_to_html(Vnode $vnode): string
+{
     $tag = $vnode->tag;
     $attributes = attributes_to_html($vnode->attributes);
-    if (is_self_closing($tag)) return '<' . $tag . $attributes . ">";
+    if (is_self_closing($tag)) {
+        return '<' . $tag . $attributes . ">";
+    }
     $children = array_to_html($vnode->children);
     return '<' . $tag . $attributes . ">" . $children . "</". $tag . ">";
 }
 
-function array_to_html(array $vnodes): string {
+function array_to_html(array $vnodes): string
+{
     $result = '';
-    foreach ($vnodes as $v) $result .= to_html($v);
+    foreach ($vnodes as $v) {
+        $result .= to_html($v);
+    }
     return $result;
 }
 
-function is_vnode($thing): bool {
+function is_vnode($thing): bool
+{
     return $thing instanceof Vnode;
 }
 
-function is_wrapped($thing): bool {
+function is_wrapped($thing): bool
+{
     return $thing instanceof iWrapped;
 }
 
-function to_html($thing): string {
-    if (is_vnode($thing)) return vnode_to_html($thing);
-    elseif (is_array($thing)) return array_to_html($thing);
-    elseif (is_wrapped($thing)) return $thing->unwrap();
-    elseif (is_null($thing)) return '';
+function to_html($thing): string
+{
+    if (is_vnode($thing)) {
+        return vnode_to_html($thing);
+    } elseif (is_array($thing)) {
+        return array_to_html($thing);
+    } elseif (is_wrapped($thing)) {
+        return $thing->unwrap();
+    } elseif (is_null($thing)) {
+        return '';
+    }
     return htmlspecialchars((string)$thing);
 }
 
@@ -237,29 +286,38 @@ function to_html($thing): string {
 // Parsing
 // ///////////////////////////////////////////////////////////////////
 
-function attributes_to_array(\DOMNamedNodeMap $atts): array {
+function attributes_to_array(\DOMNamedNodeMap $atts): array
+{
     $res = [];
-    foreach ($atts as $key => $val) $res[$key] = $val->textContent;
+    foreach ($atts as $key => $val) {
+        $res[$key] = $val->textContent;
+    }
     return $res;
 }
 
-function elm_to_vnode(\DOMElement $elm): Vnode {
+function elm_to_vnode(\DOMElement $elm): Vnode
+{
     $children = list_to_array($elm->childNodes);
     $attributes = attributes_to_array($elm->attributes);
     return el($elm->nodeName, $attributes, $children);
 }
 
-function list_to_array(\DOMNodeList $node_list): array {
+function list_to_array(\DOMNodeList $node_list): array
+{
     $res = [];
     foreach ($node_list as $item) {
         $type = $item->nodeType;
-        if ($type === XML_TEXT_NODE) $res[] = $item->textContent;
-        elseif ($type === XML_ELEMENT_NODE) $res[] = elm_to_vnode($item);
+        if ($type === XML_TEXT_NODE) {
+            $res[] = $item->textContent;
+        } elseif ($type === XML_ELEMENT_NODE) {
+            $res[] = elm_to_vnode($item);
+        }
     }
     return $res;
 }
 
-function from_html(string $str): array {
+function from_html(string $str): array
+{
     $doc = new \DOMDocument();
     libxml_use_internal_errors(true);
     $doc->loadHTML($str);

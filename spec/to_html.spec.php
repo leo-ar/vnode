@@ -1,11 +1,16 @@
 <?php
+
 declare(strict_types=1);
 
 require_once './src/vnode.php';
 
-use function vnode\{to_html, from_html, el, raw};
+use function vnode\to_html;
+use function vnode\from_html;
+use function vnode\el;
+use function vnode\raw;
 
-describe("to_html", function () {});
+describe("to_html", function () {
+});
 
 describe("to_html(from_html('<my-tag/>'))", function () {
     it("returns an empty element: `<my-tag></my-tag>`", function () {
