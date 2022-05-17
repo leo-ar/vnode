@@ -12,7 +12,7 @@
 
 - [ ] Review the API
 - [ ] Complete tests
-- [ ] Add script to format the code
+- [x] Add script to format the code
 - [ ] Add documentation
   - [ ] phpdoc
   - [ ] README

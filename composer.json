@@ -19,9 +19,11 @@
     "php" : "^8.0"
   },
   "require-dev": {
-    "kahlan/kahlan": "^5.2"
+    "kahlan/kahlan": "^5.2",
+    "friendsofphp/php-cs-fixer": "^3.8"
   },
   "scripts": {
-    "test": "kahlan --reporter='verbose'"
+    "test": "kahlan --reporter='verbose'",
+    "format": "php-cs-fixer fix"
   }
 }
